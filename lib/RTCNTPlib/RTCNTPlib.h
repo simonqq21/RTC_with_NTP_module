@@ -30,10 +30,11 @@ class RTCNTP {
         RTCNTP(int gmtOffset);
         void begin();
         void printTime();
-        void refreshNTPTime();
-        void updateRTCWithNTP();
         DateTime getRTCTime();
         DateTime getNTPTime();
+        void setRTCTime(DateTime newDT);
+        bool refreshNTPTime();
+        void updateRTCWithNTP();
         void setGMTOffset(int gmtOffset);
     private: 
         RTC_DS1307 _rtc;

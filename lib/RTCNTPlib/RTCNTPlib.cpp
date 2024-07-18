@@ -15,6 +15,7 @@ void RTCNTP::begin() {
         delay(500);
     }
     _ntpClient.begin();
+    this->refreshNTPTime();
 }
 
 // print the current time in the class
@@ -22,17 +23,6 @@ void RTCNTP::printTime() {
    Serial.printf("%4u/%02u/%02u %02u:%02u:%02u", _dtnow.year(), _dtnow.month(), 
         _dtnow.day(), _dtnow.hour(), 
         _dtnow.minute(), _dtnow.second());
-}
-
-// refresh NTP time from the internet
-void RTCNTP::refreshNTPTime() {
-    _ntpClient.setTimeOffset(_gmtOffsetInHours * 3600); // UTC+8 for Philippines
-    _ntpUpdateStatus = _ntpClient.update();
-}
-
-// update the RTC with NTP time
-void RTCNTP::updateRTCWithNTP() {
-    
 }
 
 // get the time from the RTC and return it as a DateTime struct
@@ -47,6 +37,28 @@ DateTime RTCNTP::getNTPTime() {
     _epochTime = _ntpClient.getEpochTime();
     return DateTime(year(_epochTime), month(_epochTime), day(_epochTime), 
         _ntpClient.getHours(), _ntpClient.getMinutes(), _ntpClient.getSeconds());
+}
+
+// set RTC time with a DateTime struct
+void RTCNTP::setRTCTime(DateTime newDT) {
+    _rtc.adjust(newDT);
+}
+
+// refresh NTP time from the internet
+bool RTCNTP::refreshNTPTime() {
+    _ntpClient.setTimeOffset(_gmtOffsetInHours * 3600); // UTC+8 for Philippines
+    _ntpUpdateStatus = _ntpClient.update();
+    return _ntpUpdateStatus;
+}
+
+// update the RTC with NTP time
+void RTCNTP::updateRTCWithNTP() {
+    // refresh NTP time
+    this->refreshNTPTime();
+    // update RTC time to NTP time
+    this->setRTCTime(this->getNTPTime());
+    // get the current time
+    this->getRTCTime();
 }
 
 // set the NTP GMT offset

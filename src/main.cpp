@@ -1,19 +1,22 @@
 #include <Arduino.h>
 #include "RTCNTPlib.h"
 
-// put function declarations here:
-int myFunction(int, int);
+RTCNTP rtcntp(8);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  rtcntp.begin();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
+  // get NTP time
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  // set RTC time to fixed time
+
+  // print RTC time
+
+  // set RTC time to NTP time 
+
+  // print RTC time
+
 }
