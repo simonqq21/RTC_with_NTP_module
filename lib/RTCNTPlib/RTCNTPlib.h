@@ -7,24 +7,8 @@
 #include <WiFiUdp.h>
 #include <SPI.h>
 
-// void printTime(int year, int month, int day, int hour, int minute, int second);
-// void printRTCTime(DateTime datetime); 
-// void printNTPTime(NTPClient timeClient);
-// void initTime();
-// void updateNTPTime();
-// void adjustRTCWithNTP(NTPClient timeClient, RTC_DS1307 rtc);
-// void adjustRTCFromJSON();
-// void adjustRTC(int _year, int _month, int _day, int hour, int minute, int second);
-// void getCurDateTime(bool readRTC);
-// int getYear();
-// int getMonth();
-// int getDay();
-// int getHour();
-// int getMinute();
-// int getSecond();
-// void NTPUpdateLoop();
-// void checkTime();
-
+// This library combines a DS1307 RTC with NTP time. NTP time can be used to update the RTC 
+// periodically, while the RTC can store the time when NTP connection is not available.
 class RTCNTP {
     public:
         RTCNTP(int gmtOffset);

@@ -34,9 +34,17 @@ DateTime RTCNTP::getRTCTime() {
 // get the NTP time and return it as a DateTime struct
 DateTime RTCNTP::getNTPTime() {
     this->refreshNTPTime();
-    _epochTime = _ntpClient.getEpochTime();
-    return DateTime(year(_epochTime), month(_epochTime), day(_epochTime), 
-        _ntpClient.getHours(), _ntpClient.getMinutes(), _ntpClient.getSeconds());
+    // if NTP successfully refreshed, get time from NTP.
+    if (_ntpUpdateStatus) {
+        _epochTime = _ntpClient.getEpochTime();
+        _dtnow = DateTime(year(_epochTime), month(_epochTime), day(_epochTime), 
+            _ntpClient.getHours(), _ntpClient.getMinutes(), _ntpClient.getSeconds());
+    }
+    // else NTP failed to connect, get time from RTC.
+    else {
+        this->getRTCTime();
+    }
+    return _dtnow;
 }
 
 // set RTC time with a DateTime struct
@@ -47,7 +55,11 @@ void RTCNTP::setRTCTime(DateTime newDT) {
 // refresh NTP time from the internet
 bool RTCNTP::refreshNTPTime() {
     _ntpClient.setTimeOffset(_gmtOffsetInHours * 3600); // UTC+8 for Philippines
-    _ntpUpdateStatus = _ntpClient.update();
+    // when there is no NTP connection, update returns 0 and isTimeSet returns 0
+    // when there is NTP connection, update returns 0 and isTimeSet returns 1
+    _ntpClient.update();
+    _ntpUpdateStatus = _ntpClient.isTimeSet();
+    // Serial.printf("ntpUpdateStatus=%d, isTimeSet=%d\n", _ntpUpdateStatus, _ntpClient.isTimeSet());
     return _ntpUpdateStatus;
 }
 
