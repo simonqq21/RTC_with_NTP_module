@@ -20,9 +20,20 @@ void RTCNTP::begin() {
 
 // print the current time in the class
 void RTCNTP::printTime() {
-   Serial.printf("%4u/%02u/%02u %02u:%02u:%02u", _dtnow.year(), _dtnow.month(), 
+//    Serial.printf("%4u/%02u/%02u %02u:%02u:%02u", _dtnow.year(), _dtnow.month(), 
+//         _dtnow.day(), _dtnow.hour(), 
+//         _dtnow.minute(), _dtnow.second());
+    Serial.println(this->getISODateTime());
+}
+
+String RTCNTP::getISODateTime() {
+    // 2024-08-12T22:57:00Z
+    char buffer[23];
+    snprintf(buffer, 23, "%04u-%02u-%02uT%02u:%02u:%02uZ",  
+        _dtnow.year(), _dtnow.month(), 
         _dtnow.day(), _dtnow.hour(), 
         _dtnow.minute(), _dtnow.second());
+    return buffer;
 }
 
 // get the time from the RTC and return it as a DateTime struct

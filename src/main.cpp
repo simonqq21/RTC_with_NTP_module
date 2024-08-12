@@ -40,6 +40,7 @@ void test() {
 
 void setup() {
   Serial.begin(115200);
+  delay(10000);
   Serial.println("Testing not connected to wifi");
   WiFi.begin(SSID, PASS);
   // while (WiFi.status() != WL_CONNECTED) {
