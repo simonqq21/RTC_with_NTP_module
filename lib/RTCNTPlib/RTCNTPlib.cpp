@@ -36,6 +36,13 @@ String RTCNTP::getISODateTime() {
     return buffer;
 }
 
+void RTCNTP::setISODateTime(String dtStr) {
+    int tY, tMon, tD, tH, tMin, tS;
+    sscanf(dtStr.c_str(), "%04u-%02u-%02uT%02u:%02u:%02uZ", 
+        &tY, &tMon, &tD, &tH, &tMin, &tS);
+    this->setRTCTime(DateTime(tY, tMon, tD, tH, tMin, tS));
+}
+
 // get the time from the RTC and return it as a DateTime struct
 DateTime RTCNTP::getRTCTime() {
     _dtnow = _rtc.now();
@@ -61,6 +68,7 @@ DateTime RTCNTP::getNTPTime() {
 // set RTC time with a DateTime struct
 void RTCNTP::setRTCTime(DateTime newDT) {
     _rtc.adjust(newDT);
+    this->getRTCTime();
 }
 
 // refresh NTP time from the internet

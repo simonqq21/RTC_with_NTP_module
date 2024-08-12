@@ -22,7 +22,6 @@ void test() {
   // set RTC time to fixed time
   Serial.println("set RTC time to fixed time");
   rtcntp.setRTCTime(DateTime(2001,01,02,0,0,0));
-  rtcntp.getRTCTime();
   rtcntp.printTime();
   delay(3000);
   // set RTC time to NTP time 
@@ -30,6 +29,11 @@ void test() {
   rtcntp.updateRTCWithNTP();
   rtcntp.printTime();
   delay(3000);
+  Serial.println("set RTC time to ISO datetime");
+  rtcntp.setISODateTime("2024-01-01T01:01:01Z");
+  rtcntp.printTime();
+  delay(3000);
+  Serial.println("end test");
   // // set RTC time back to fixed time
   // Serial.println("set RTC time back to fixed time");
   // rtcntp.setRTCTime(DateTime(2001,01,02,0,0,0));

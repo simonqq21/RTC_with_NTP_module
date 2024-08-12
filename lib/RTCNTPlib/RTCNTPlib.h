@@ -15,6 +15,7 @@ class RTCNTP {
         void begin();
         void printTime();
         String getISODateTime();
+        void setISODateTime(String dtStr);
         DateTime getRTCTime();
         DateTime getNTPTime();
         void setRTCTime(DateTime newDT);
