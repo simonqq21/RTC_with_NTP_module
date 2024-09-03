@@ -2,9 +2,7 @@
 #include "RTCNTPlib.h"
 
 // constructor
-RTCNTP::RTCNTP(int gmtOffset) : _ntpClient(_ntpUDP, "ntp.pagasa.dost.gov.ph") {
-    _gmtOffsetInHours = gmtOffset;
-    _ntpClient.setTimeOffset(_gmtOffsetInHours * 3600);
+RTCNTP::RTCNTP() : _ntpClient(_ntpUDP, "ntp.pagasa.dost.gov.ph") {
 }
 
 // initialize RTC and NTP
@@ -86,8 +84,10 @@ bool RTCNTP::refreshNTPTime() {
 void RTCNTP::updateRTCWithNTP() {
     // refresh NTP time
     this->refreshNTPTime();
-    // update RTC time to NTP time
-    this->setRTCTime(this->getNTPTime());
+    if (_ntpUpdateStatus) {
+        // update RTC time to NTP time
+        this->setRTCTime(this->getNTPTime());
+    }
     // get the current time
     this->getRTCTime();
 }
@@ -95,4 +95,5 @@ void RTCNTP::updateRTCWithNTP() {
 // set the NTP GMT offset
 void RTCNTP::setGMTOffset(int gmtOffset) {
     _gmtOffsetInHours = gmtOffset;
+    _ntpClient.setTimeOffset(_gmtOffsetInHours * 3600);
 }

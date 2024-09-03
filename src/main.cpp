@@ -4,11 +4,12 @@
 
 const char* SSID = "QUE-STARLINK";
 const char* PASS = "Quefamily01258";
-RTCNTP rtcntp(8);
+RTCNTP rtcntp;
 
 void test() {
   Serial.println("DS1307 RTC and NTP library testing script.");
   rtcntp.begin();
+  rtcntp.setGMTOffset(8);
   // read RTC time
   Serial.println("read RTC time");
   rtcntp.getRTCTime();
@@ -24,13 +25,14 @@ void test() {
   rtcntp.setRTCTime(DateTime(2001,01,02,0,0,0));
   rtcntp.printTime();
   delay(3000);
+  // set RTC time to ISO datetime
+  Serial.println("set RTC time to ISO datetime");
+  rtcntp.setISODateTime("2024-01-01T01:01:01Z");
+  rtcntp.printTime();
+  delay(3000);
   // set RTC time to NTP time 
   Serial.println("set RTC time back to NTP time ");
   rtcntp.updateRTCWithNTP();
-  rtcntp.printTime();
-  delay(3000);
-  Serial.println("set RTC time to ISO datetime");
-  rtcntp.setISODateTime("2024-01-01T01:01:01Z");
   rtcntp.printTime();
   delay(3000);
   Serial.println("end test");
@@ -44,7 +46,7 @@ void test() {
 
 void setup() {
   Serial.begin(115200);
-  delay(10000);
+  delay(1000);
   Serial.println("Testing not connected to wifi");
   WiFi.begin(SSID, PASS);
   // while (WiFi.status() != WL_CONNECTED) {
